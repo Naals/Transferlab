@@ -2,6 +2,17 @@ spring:
   application:
     name: transferlab
 
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/transferlab}
+    username: ${DB_USER:transferlab}
+    password: ${DB_PASSWORD:}
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 5000
+
+  flyway:
+    enabled: true
+
 server:
   address: 127.0.0.1
   port: 8080
