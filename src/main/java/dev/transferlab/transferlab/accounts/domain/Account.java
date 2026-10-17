@@ -1,6 +1,7 @@
 package dev.transferlab.transferlab.accounts.domain;
 
 import dev.transferlab.transferlab.shared.domain.Money;
+import dev.transferlab.transferlab.shared.domain.BusinessRejection;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -30,7 +31,9 @@ public record Account(
 
     public void requireActive() {
         if (status != Status.ACTIVE) {
-            throw new IllegalStateException("ACCOUNT_INACTIVE");
+            throw new BusinessRejection(
+                    BusinessRejection.Code.ACCOUNT_INACTIVE
+            );
         }
     }
 
@@ -39,8 +42,11 @@ public record Account(
         requireActive();
 
         if (balance.amountMinor() < amount.amountMinor()) {
-            throw new IllegalStateException("INSUFFICIENT_FUNDS");
+            throw new BusinessRejection(
+                    BusinessRejection.Code.INSUFFICIENT_FUNDS
+            );
         }
+
 
         return new Account(id, ownerId, balance.subtract(amount), status);
     }

@@ -2,6 +2,7 @@ package dev.transferlab.transferlab.transfers.integration;
 
 import dev.transferlab.transferlab.accounts.application.port.AccountRepository;
 import dev.transferlab.transferlab.accounts.domain.Account;
+import dev.transferlab.transferlab.shared.domain.BusinessRejection;
 import dev.transferlab.transferlab.shared.domain.Money;
 import dev.transferlab.transferlab.support.AccountFixtures;
 import dev.transferlab.transferlab.support.PostgreSqlTestConfiguration;
@@ -114,7 +115,9 @@ class ConcurrentTransferIT {
             return "POSTED";
         } catch (IllegalStateException exception) {
             if ("INSUFFICIENT_FUNDS".equals(exception.getMessage())) {
-                return "INSUFFICIENT_FUNDS";
+                throw new BusinessRejection(
+                        BusinessRejection.Code.INSUFFICIENT_FUNDS
+                );
             }
 
             throw exception;
